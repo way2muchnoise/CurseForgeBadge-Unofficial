@@ -10,10 +10,10 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="css/normalize.min.css">
-        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
-        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <script src="{{ url_for('static', filename='js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') }}"></script>
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -22,7 +22,7 @@
 
         <div class="header-container">
             <header class="wrapper clearfix">
-                <h1 class="title">CurseForge Badges</h1>
+                <h1 class="title">CurseForge Badges - The ugly API documentatin page</h1>
             </header>
         </div>
 
@@ -58,6 +58,6 @@
             </footer>
         </div>
 
-        <script src="js/main.js"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     </body>
 </html>

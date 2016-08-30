@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import render_template
 from CFReader import get_downloads
 
 app = Flask(__name__)
@@ -6,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def landing():
-    return app.send_static_file('index.html')
+    return render_template('index.html')
 
 
 @app.route('/<project>.svg')
