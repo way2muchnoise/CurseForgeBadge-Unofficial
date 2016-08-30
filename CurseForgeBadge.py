@@ -20,7 +20,7 @@ def hello_world(project_id, style='full', extra=None):
         .replace('{{dls}}', dls)\
         .replace('{{width}}', repr(width))\
         .replace('{{totalWidth}}', repr(30 + width))\
-        .replace('{{offset}}', repr(30.5 + width / 2))
+        .replace('{{offset}}', repr(30.5 + width / 2)), 200, {'Content-Type': 'image/svg+xml'}
 
 if __name__ == '__main__':
     app.run()
