@@ -32,4 +32,4 @@ def hello_world(project, style='full', extra=None, category='projects'):
         .replace('{{offset}}', repr(30.5 + width / 2)), 200, {'Content-Type': 'image/svg+xml'}
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port='80')
