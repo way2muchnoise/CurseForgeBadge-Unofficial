@@ -7,13 +7,10 @@ app = Flask(__name__)
 @app.route('/<project>.svg')
 @app.route('/<style>_<project>.svg')
 @app.route('/<style>_<project>_<extra>.svg')
-@app.route('/<category>/<project>.svg')
-@app.route('/<category>/<style>_<project>.svg')
-@app.route('/<category>/<style>_<project>_<extra>.svg')
-def hello_world(project, style='full', extra=None, category='projects'):
+def hello_world(project, style='full', extra=None):
     template = app.open_resource('templates/shield.svg', 'r').read()
     replacement = ''
-    dls = get_downloads(category, project)
+    dls = get_downloads(project)
     if style == 'short':
         splitted = dls.split(',')
         first_numbner = splitted[0][0]
