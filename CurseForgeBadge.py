@@ -4,6 +4,11 @@ from CFReader import get_downloads
 app = Flask(__name__)
 
 
+@app.route('/')
+def landing():
+    return app.send_static_file('index.html')
+
+
 @app.route('/<project>.svg')
 @app.route('/<style>_<project>.svg')
 @app.route('/<style>_<project>_<extra>.svg')
