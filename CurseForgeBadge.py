@@ -42,7 +42,7 @@ def supported_versions(project, style='all', text='Available for'):
     versions = CFReader.get_versions(project)
     versions_text = versions[0] if style == 'latest' else ' | '.join(str(version) for version in versions)
     version_width = max(len(versions_text) * 6, 40)
-    text_width = len(text) * 6 + 4
+    text_width = len(text) * 7 + 4
     return create_badge(template, versions=versions_text, text=text, widthText=text_width, widthVersions=version_width,
                         totalWidth=(version_width + text_width), offsetText=(text_width / 2),
                         offsetVersions=(text_width + version_width / 2)), 200, {'Content-Type': 'image/svg+xml'}
