@@ -9,7 +9,7 @@
 	<g text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
 		<text x="{{offsetText}}" y="15" fill="#010101" fill-opacity=".3">{{text}}</text>
 		<text x="{{offsetText}}" y="14" fill="#fff">{{text}}</text>
-		<text x="{{offsetVersions}}" y="15" fill="#f1f1f1" fill-opacity=".3">{{versions}}</text>
-		<text x="{{offsetVersions}}" y="14" fill="#1C1C1C">{{versions}}</text>
+		<text x="{{offsetVersions}}" y="15" fill="#010101" fill-opacity=".3">{{versions}}</text>
+		<text x="{{offsetVersions}}" y="14" fill="#fff">{{versions}}</text>
 	</g>
 </svg>
