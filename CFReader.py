@@ -8,7 +8,7 @@ def get_project(project):
 
 def get_downloads(project):
     response = get_project(project)
-    pattern = 'Total Downloads</div>\s+<div class="info-data">(.*?)</div>'
+    pattern = 'Total Downloads\s*</div>\s*<div class="info-data">(.*?)</div>'
     m = re.search(pattern, response)
     if m:
         return m.group(1)
@@ -18,7 +18,7 @@ def get_downloads(project):
 
 def get_versions(project):
     response = get_project(project)
-    pattern = '<h4 class="e-sidebar-subheader overflow-tip">Minecraft (.*?)</h4>'
+    pattern = '<h4 class="e-sidebar-subheader overflow-tip">\s+<a.*?>\s+Minecraft (.*?)\s+</a>\s+</h4>'
     versions = re.findall(pattern, response)
     if len(versions) > 0:
         return versions
