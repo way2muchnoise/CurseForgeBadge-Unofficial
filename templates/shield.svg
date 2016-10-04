@@ -3,13 +3,13 @@
 		<rect width="{{totalWidth}}" height="20" rx="3" fill="#fff"/>
 	</mask>
 	<g mask="url(#roundedCorners)">
-		<path fill="#2D2D2D" d="M0 0h{{widthText}}v20H0z"/>
-		<path fill="#E04E14" d="M{{widthText}} 0h{{widthVersions}}v20H{{widthText}}z"/>
+		<path fill="#{{l_colour}}" d="M0 0h{{widthText}}v20H0z"/>
+		<path fill="#{{r_colour}}" d="M{{widthText}} 0h{{widthVersions}}v20H{{widthText}}z"/>
 	</g>
 	<g text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
-		<text x="{{offsetText}}" y="15" fill="#010101" fill-opacity=".3">{{text}}</text>
-		<text x="{{offsetText}}" y="14" fill="#fff">{{text}}</text>
-		<text x="{{offsetVersions}}" y="15" fill="#010101" fill-opacity=".3">{{versions}}</text>
-		<text x="{{offsetVersions}}" y="14" fill="#fff">{{versions}}</text>
+		<text x="{{offsetText}}" y="15" fill="#{{shadow_colour}}" fill-opacity=".3">{{text}}</text>
+		<text x="{{offsetText}}" y="14" fill="#{{text_colour}}">{{text}}</text>
+		<text x="{{offsetVersions}}" y="15" fill="#{{shadow_colour}}" fill-opacity=".3">{{versions}}</text>
+		<text x="{{offsetVersions}}" y="14" fill="#{{text_colour}}">{{versions}}</text>
 	</g>
 </svg>
