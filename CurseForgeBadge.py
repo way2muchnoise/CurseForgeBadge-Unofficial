@@ -60,5 +60,12 @@ def supported_versions(project, style='all', text='Available for', l_colour='2D2
                         text_colour=text_colour, shadow_colour=shadow_colour), 200, {'Content-Type': 'image/svg+xml'}
 
 
+@app.after_request
+def add_header(response):
+    # Image may be cached up to 3 hour
+    response.cache_control.max_age = 60 * 60 * 3
+    return response
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='80')
