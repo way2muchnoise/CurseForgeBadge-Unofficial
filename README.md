@@ -2,9 +2,9 @@
 A little badge/shield for minecraft mods/packs/... on CurseForge
 
 ## Usage
-The base url is [https://cf.way2muchnoise.eu](https://cf.way2muchnoise.eu).
-Both http and https are available.
- This url can be appended by following patterns.  
+The base url is [https://cf.way2muchnoise.eu](https://cf.way2muchnoise.eu). Both http and https are available. I advice using http when using it on GitHub since it doesn't seem to like my https that much.  
+
+### Possible patterns
 
 * /\<project>.svg: project being either the id or name(link in the url).
     * [![](http://cf.way2muchnoise.eu/240630.svg)](https://minecraft.curseforge.com/projects/just-enough-resources-jer) -> `http://cf.way2muchnoise.eu/240630.svg`
