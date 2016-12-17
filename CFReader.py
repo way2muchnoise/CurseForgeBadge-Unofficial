@@ -24,3 +24,13 @@ def get_versions(project):
         return versions
     else:
         return 'Error'
+
+
+def get_tile(project):
+    response = get_project(project)
+    pattern = '<h1 class="project-title">\s+<a.*?>\s+<span class="overflow-tip">(.*?)\s*</span></a>\s+</h1>'
+    m = re.search(pattern, response)
+    if m:
+        return m.group(1)
+    else:
+        return 'Error'
