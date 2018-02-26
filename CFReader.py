@@ -6,6 +6,9 @@ from lxml.cssselect import CSSSelector
 def get_project(project):
     return urllib2.urlopen("https://minecraft.curseforge.com/projects/" + project).read()
 
+def get_files(project):
+    return get_project(project + "/files")
+
 def get_downloads(project):
     response = get_project(project)
     pattern = 'Total Downloads\s*</div>\s*<div class="info-data">(.*?)</div>'
@@ -17,8 +20,7 @@ def get_downloads(project):
 
 
 def get_versions(project):
-    r = urllib2.urlopen('https://minecraft.curseforge.com/projects/' + project + '/files')
-    tree = lxml.html.fromstring(r.read())
+    tree = lxml.html.fromstring(get_files(project))
     sel = CSSSelector('option.game-version-type')
     results = [ele.text.replace('Minecraft ', '') for ele in sel(tree) if 'Minecraft' in ele.text]
     if len(results) > 0:
