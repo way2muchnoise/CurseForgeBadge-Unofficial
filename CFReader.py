@@ -7,7 +7,13 @@ from lxml.cssselect import CSSSelector
 def get_project(project):
     opener = urllib2.build_opener()
     opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
-    return opener.open("https://minecraft.curseforge.com/projects/" + project).read()
+    opened = opener.open("https://minecraft.curseforge.com/projects/" + project)
+    if '?' in project:
+        opened_url = opened.geturl()
+        params = project.split('?')[-1]
+        if params not in opened_url:
+            opened = opener.open(opened_url + '?' + params)
+    return opened.read()
 
 
 def get_files(project):
@@ -42,3 +48,17 @@ def get_tile(project):
         return m.group(1)
     else:
         return 'Error'
+
+
+def get_modpacks(project):
+    response = get_project(project + '/relations/dependents?filter-related-dependents=6')
+    pagination_pattern = r'<a href="(.*?)" class="b-pagination-item">(\d+)</a>'
+    pages = re.findall(pagination_pattern, response)
+    current_page = 1
+    if len(pages) > 0:
+        largest = sorted(pages, key=lambda page: int(page[1]))[-1]
+        response = get_project(largest[0][len('/projects/'):])
+        current_page = int(largest[1])
+    pattern = r'<li class="project-list-item">'
+    items = re.findall(pattern, response)
+    return "{:,}".format(len(items) + (current_page - 1) * 20)
