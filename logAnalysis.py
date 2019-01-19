@@ -3,11 +3,12 @@ import gzip
 import os
 import re
 from HTMLParser import HTMLParser
+from urllib2 import HTTPError
 
 import CFReader
 
 directory = raw_input('dir to read: ')
-output = file(raw_input('output file: '), 'w')
+output = open(raw_input('output file: '), 'w')
 if not directory.endswith('/'):
     directory += '/'
 pattern = re.compile(r'GET /(.*?\.svg) ')
@@ -27,6 +28,10 @@ for item in set(calls):
 projects = []
 h = HTMLParser()
 for project in set(resolve):
-    projects.append(h.unescape(CFReader.get_tile(project)).strip())
+    try:
+        projects.append(h.unescape(CFReader.get_tile(project)).strip())
+    except HTTPError:
+        print 'Errored on ' + project
 for project in set(projects):
     output.write(project + '\n')
+output.close()
