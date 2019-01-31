@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template
+from flask import request
 
 import CFReader
 from badgeCreator import create_badge
@@ -21,7 +22,7 @@ def landing():
 @app.route('/<style>_<project>_<extra>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
 def downloads(project, style='full', extra=None, l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
               shadow_colour='010101', logo_colour='1C1C1C'):
-    template = app.open_resource('templates/curseShield.svg', 'r').read()
+    template = open_template('curseShield.svg', request.args)
     replacement = ''
     dls = CFReader.get_downloads(project)
     if style == 'short':
@@ -49,7 +50,7 @@ def downloads(project, style='full', extra=None, l_colour='E04E14', r_colour='2D
 @app.route('/versions/<text>_<project>_<style>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>).svg')
 def supported_versions(project, style='all', text='Available for', l_colour='2D2D2D', r_colour='E04E14',
                        text_colour='fff', shadow_colour='010101'):
-    template = app.open_resource('templates/shield.svg', 'r').read()
+    template = open_template('shield.svg', request.args)
     versions = CFReader.get_versions(project)
     versions_text = versions[0] if style == 'latest' else ' | '.join(str(version) for version in versions)
     version_width = max(len(versions_text) * 6, 40)
@@ -69,7 +70,7 @@ def supported_versions(project, style='all', text='Available for', l_colour='2D2
 @app.route('/packs/<style>_<project>_<before>_<after>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
 def packs(project, style='full', before='included in', after='packs', l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
               shadow_colour='010101', logo_colour='1C1C1C'):
-    template = app.open_resource('templates/curseShield.svg', 'r').read()
+    template = open_template('curseShield.svg', request.args)
     replacement = before + ' '
     packs = CFReader.get_dependents(project, 'included')
     if style == 'short':
@@ -97,7 +98,7 @@ def packs(project, style='full', before='included in', after='packs', l_colour='
 @app.route('/mods/<style>_<project>_<before>_<after>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
 def mods(project, style='full', before='required for', after='mods', l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
               shadow_colour='010101', logo_colour='1C1C1C'):
-    template = app.open_resource('templates/curseShield.svg', 'r').read()
+    template = open_template('curseShield.svg', request.args)
     replacement = before + ' '
     packs = CFReader.get_dependents(project, 'required')
     if style == 'short':
@@ -123,6 +124,13 @@ def add_header(response):
     # Image may be cached up to 3 hour
     response.cache_control.max_age = 60 * 60 * 3
     return response
+
+
+def open_template(template, args):
+    uri = 'templates/'
+    if args.get('badge_style') == 'for_the_badge':
+        uri += 'for_the_badge_'
+    return app.open_resource(uri + template, 'r').read()
 
 
 if __name__ == '__main__':
