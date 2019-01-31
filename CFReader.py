@@ -50,8 +50,18 @@ def get_tile(project):
         return 'Error'
 
 
-def get_modpacks(project):
-    response = get_project(project + '/relations/dependents?filter-related-dependents=6')
+dependents_dict = {
+    'embedded': '1',
+    'optional': '2',
+    'required': '3',
+    'tool': '4',
+    'incompatible': '5',
+    'included': '6'
+}
+
+
+def get_dependents(project, type):
+    response = get_project(project + '/relations/dependents?filter-related-dependents=' + dependents_dict[type])
     pagination_pattern = r'<a href="(.*?)" class="b-pagination-item">(\d+)</a>'
     pages = re.findall(pagination_pattern, response)
     current_page = 1

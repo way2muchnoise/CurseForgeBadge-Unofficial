@@ -71,7 +71,7 @@ def packs(project, style='full', before='included in', after='packs', l_colour='
               shadow_colour='010101', logo_colour='1C1C1C'):
     template = app.open_resource('templates/curseShield.svg', 'r').read()
     replacement = before + ' '
-    packs = CFReader.get_modpacks(project)
+    packs = CFReader.get_dependents(project, 'included')
     if style == 'short':
         splitted = packs.split(',')
         first_number = splitted[0][0]
@@ -81,6 +81,36 @@ def packs(project, style='full', before='included in', after='packs', l_colour='
     else:
         replacement += packs
     if after:
+        replacement += ' ' + after
+    width = max(len(replacement) * 7 + 12, 40)
+    return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
+                        offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
+                        shadow_colour=shadow_colour, logo_colour=logo_colour), 200, {'Content-Type': 'image/svg+xml'}
+
+
+@app.route('/mods/<project>.svg')
+@app.route('/mods/<project>(<l_colour>).svg')
+@app.route('/mods/<style>_<project>.svg')
+@app.route('/mods/<style>_<project>(<l_colour>).svg')
+@app.route('/mods/<style>_<project>_<before>_<after>.svg')
+@app.route('/mods/<style>_<project>_<before>_<after>(<l_colour>).svg')
+@app.route('/mods/<style>_<project>_<before>_<after>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+def mods(project, style='full', before='required for', after='mods', l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
+              shadow_colour='010101', logo_colour='1C1C1C'):
+    template = app.open_resource('templates/curseShield.svg', 'r').read()
+    replacement = before + ' '
+    packs = CFReader.get_dependents(project, 'required')
+    if style == 'short':
+        splitted = packs.split(',')
+        first_number = splitted[0][0]
+        padding_zeros = '0' * (len(splitted[0]) - 1)
+        post_fix = ('M+' if len(splitted) > 2 else ('k+' if len(splitted) > 1 else ''))
+        replacement += first_number + padding_zeros + post_fix
+    else:
+        replacement += packs
+    if after:
+        if packs == '1' and after == 'mods':
+            after = 'mod'
         replacement += ' ' + after
     width = max(len(replacement) * 7 + 12, 40)
     return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
