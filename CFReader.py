@@ -32,8 +32,8 @@ def get_downloads(project):
 
 def get_versions(project):
     tree = html.fromstring(get_files(project))
-    sel = CSSSelector('option.game-version-type')
-    results = [ele.text.replace('Minecraft ', '') for ele in sel(tree) if 'Minecraft' in ele.text]
+    sel = CSSSelector('#filter-game-version option + option')
+    results = [ele.text.replace('Minecraft ', '').replace('-Snapshot', '').lstrip() for ele in sel(tree) if 'Minecraft' in ele.text or 'Snapshot' in ele.text]
     if len(results) > 0:
        return results
     else:
