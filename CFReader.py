@@ -41,7 +41,7 @@ def get_versions(project):
         return ['Error']
 
 
-def get_tile(project):
+def get_title(project):
     response = get_project(project)
     pattern = r'<h1 class="project-title.*?">\s+<a.*?>\s+<span class="overflow-tip">(.*?)\s*</span></a>\s+</h1>'
     m = re.search(pattern, response)

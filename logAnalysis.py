@@ -29,7 +29,7 @@ projects = []
 h = HTMLParser()
 for project in set(resolve):
     try:
-        projects.append(h.unescape(CFReader.get_tile(project)).strip())
+        projects.append(h.unescape(CFReader.get_title(project)).strip())
     except HTTPError:
         print 'Errored on ' + project
 for project in set(projects):
