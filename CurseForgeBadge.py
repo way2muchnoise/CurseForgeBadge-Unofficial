@@ -15,12 +15,20 @@ def landing():
 
 @app.route('/title/<project>.svg')
 @app.route('/title/<project>(<l_colour>).svg')
+@app.route('/title/<project>_<prefix>_<suffix>.svg')
+@app.route('/title/<project>(<l_colour>).svg')
+@app.route('/title/<project>_<prefix>_<suffix>(<l_colour>).svg')
 @app.route('/title/<project>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
-def title(project, l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
+@app.route('/title/<project>_<prefix>_<suffix>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+def title(project, suffix=None, prefix=None, l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
           shadow_colour='010101', logo_colour='1C1C1C'):
     template = open_template('curseShield.svg', request.args)
     replacement = CFReader.get_title(project)
-
+    if prefix:
+        replacement = prefix + ' ' + replacement
+    if suffix:
+        replacement += ' ' + suffix
+    replacement = replacement.strip()
     width = max(len(replacement) * 7 + 12, 40)
     return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
                         offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
