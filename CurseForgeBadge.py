@@ -40,8 +40,9 @@ def downloads(project, style='full', suffix=None, prefix=None, l_colour='E04E14'
         replacement = prefix + ' ' + replacement
     if suffix:
         replacement += ' ' + suffix
+    replacement = replacement.strip()
     width = max(len(replacement) * 7 + 12, 40)
-    return create_badge(template, dls=replacement.strip(), width=width, totalWidth=(30 + width),
+    return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
                         offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
                         shadow_colour=shadow_colour, logo_colour=logo_colour), 200, {'Content-Type': 'image/svg+xml'}
 
