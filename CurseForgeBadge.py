@@ -17,10 +17,13 @@ def landing():
 @app.route('/<project>(<l_colour>).svg')
 @app.route('/<style>_<project>.svg')
 @app.route('/<style>_<project>(<l_colour>).svg')
-@app.route('/<style>_<project>_<extra>.svg')
-@app.route('/<style>_<project>_<extra>(<l_colour>).svg')
-@app.route('/<style>_<project>_<extra>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
-def downloads(project, style='full', extra=None, l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
+@app.route('/<style>_<project>_<suffix>.svg')
+@app.route('/<style>_<project>_<suffix>(<l_colour>).svg')
+@app.route('/<style>_<project>_<prefix>_<suffix>.svg')
+@app.route('/<style>_<project>_<prefix>_<suffix>(<l_colour>).svg')
+@app.route('/<style>_<project>_<suffix>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+@app.route('/<style>_<project>_<prefix>_<suffix>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+def downloads(project, style='full', suffix=None, prefix=None, l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
               shadow_colour='010101', logo_colour='1C1C1C'):
     template = open_template('curseShield.svg', request.args)
     replacement = ''
@@ -33,10 +36,12 @@ def downloads(project, style='full', extra=None, l_colour='E04E14', r_colour='2D
         replacement += first_number + padding_zeros + post_fix
     else:
         replacement += dls
-    if extra:
-        replacement += ' ' + extra
+    if prefix:
+        replacement = prefix + ' ' + replacement
+    if suffix:
+        replacement += ' ' + suffix
     width = max(len(replacement) * 7 + 12, 40)
-    return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
+    return create_badge(template, dls=replacement.strip(), width=width, totalWidth=(30 + width),
                         offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
                         shadow_colour=shadow_colour, logo_colour=logo_colour), 200, {'Content-Type': 'image/svg+xml'}
 
