@@ -34,7 +34,11 @@ def get_versions(project):
     tree = html.fromstring(get_files(project))
     sel = CSSSelector('#filter-game-version option + option')
     results = [ele.text.replace('Minecraft ', '').replace('-Snapshot', '').lstrip() for ele in sel(tree) if 'Minecraft' in ele.text or 'Snapshot' in ele.text]
+    if not results:
+        for ele in sel(tree):
+            results.append(ele.text.lstrip())
     results = set(results)  # filter out duplicates
+    print results
     if len(results) > 0:
         return results
     else:
