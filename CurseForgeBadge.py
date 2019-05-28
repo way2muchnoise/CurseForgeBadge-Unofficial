@@ -13,14 +13,39 @@ def landing():
     return render_template('index.html')
 
 
+@app.route('/title/<project>.svg')
+@app.route('/title/<project>(<l_colour>).svg')
+@app.route('/title/<project>_<prefix>_<suffix>.svg')
+@app.route('/title/<project>(<l_colour>).svg')
+@app.route('/title/<project>_<prefix>_<suffix>(<l_colour>).svg')
+@app.route('/title/<project>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+@app.route('/title/<project>_<prefix>_<suffix>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+def title(project, suffix=None, prefix=None, l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
+          shadow_colour='010101', logo_colour='1C1C1C'):
+    template = open_template('curseShield.svg', request.args)
+    replacement = CFReader.get_title(project)
+    if prefix:
+        replacement = prefix + ' ' + replacement
+    if suffix:
+        replacement += ' ' + suffix
+    replacement = replacement.strip()
+    width = max(len(replacement) * 7 + 12, 40)
+    return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
+                        offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
+                        shadow_colour=shadow_colour, logo_colour=logo_colour), 200, {'Content-Type': 'image/svg+xml'}
+
+
 @app.route('/<project>.svg')
 @app.route('/<project>(<l_colour>).svg')
 @app.route('/<style>_<project>.svg')
 @app.route('/<style>_<project>(<l_colour>).svg')
-@app.route('/<style>_<project>_<extra>.svg')
-@app.route('/<style>_<project>_<extra>(<l_colour>).svg')
-@app.route('/<style>_<project>_<extra>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
-def downloads(project, style='full', extra=None, l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
+@app.route('/<style>_<project>_<suffix>.svg')
+@app.route('/<style>_<project>_<suffix>(<l_colour>).svg')
+@app.route('/<style>_<project>_<prefix>_<suffix>.svg')
+@app.route('/<style>_<project>_<prefix>_<suffix>(<l_colour>).svg')
+@app.route('/<style>_<project>_<suffix>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+@app.route('/<style>_<project>_<prefix>_<suffix>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+def downloads(project, style='full', suffix=None, prefix=None, l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
               shadow_colour='010101', logo_colour='1C1C1C'):
     template = open_template('curseShield.svg', request.args)
     replacement = ''
@@ -33,8 +58,11 @@ def downloads(project, style='full', extra=None, l_colour='E04E14', r_colour='2D
         replacement += first_number + padding_zeros + post_fix
     else:
         replacement += dls
-    if extra:
-        replacement += ' ' + extra
+    if prefix:
+        replacement = prefix + ' ' + replacement
+    if suffix:
+        replacement += ' ' + suffix
+    replacement = replacement.strip()
     width = max(len(replacement) * 7 + 12, 40)
     return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
                         offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
@@ -69,7 +97,7 @@ def supported_versions(project, style='all', text='Available for', l_colour='2D2
 @app.route('/packs/<style>_<project>_<before>_<after>(<l_colour>).svg')
 @app.route('/packs/<style>_<project>_<before>_<after>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
 def packs(project, style='full', before='included in', after='packs', l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
-              shadow_colour='010101', logo_colour='1C1C1C'):
+          shadow_colour='010101', logo_colour='1C1C1C'):
     template = open_template('curseShield.svg', request.args)
     replacement = before + ' '
     packs = CFReader.get_dependents(project, 'included')
@@ -97,7 +125,7 @@ def packs(project, style='full', before='included in', after='packs', l_colour='
 @app.route('/mods/<style>_<project>_<before>_<after>(<l_colour>).svg')
 @app.route('/mods/<style>_<project>_<before>_<after>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
 def mods(project, style='full', before='required for', after='mods', l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
-              shadow_colour='010101', logo_colour='1C1C1C'):
+         shadow_colour='010101', logo_colour='1C1C1C'):
     template = open_template('curseShield.svg', request.args)
     replacement = before + ' '
     packs = CFReader.get_dependents(project, 'required')
@@ -111,6 +139,38 @@ def mods(project, style='full', before='required for', after='mods', l_colour='E
         replacement += packs
     if after:
         if packs == '1' and after == 'mods':
+            after = 'mod'
+        replacement += ' ' + after
+    width = max(len(replacement) * 7 + 12, 40)
+    return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
+                        offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
+                        shadow_colour=shadow_colour, logo_colour=logo_colour), 200, {'Content-Type': 'image/svg+xml'}
+
+
+@app.route('/supported/<project>.svg')
+@app.route('/supported/<project>(<l_colour>).svg')
+@app.route('/supported/<style>_<project>.svg')
+@app.route('/supported/<style>_<project>(<l_colour>).svg')
+@app.route('/supported/<style>_<project>_<before>_<after>.svg')
+@app.route('/supported/<style>_<project>_<before>_<after>(<l_colour>).svg')
+@app.route('/supported/<style>_<project>_<before>_<after>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+def supported(project, style='full', before='supported by', after='mods', l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
+              shadow_colour='010101', logo_colour='1C1C1C'):
+    template = open_template('curseShield.svg', request.args)
+    replacement = before + ' '
+    required = CFReader.get_dependents(project, 'required')
+    optional = CFReader.get_dependents(project, 'optional')
+    total = "{:,}".format(long(required.replace(",", "")) + long(optional.replace(",", "")))
+    if style == 'short':
+        splitted = total.split(',')
+        first_number = splitted[0][0]
+        padding_zeros = '0' * (len(splitted[0]) - 1)
+        post_fix = ('M+' if len(splitted) > 2 else ('k+' if len(splitted) > 1 else ''))
+        replacement += first_number + padding_zeros + post_fix
+    else:
+        replacement += total
+    if after:
+        if total == '1' and after == 'mods':
             after = 'mod'
         replacement += ' ' + after
     width = max(len(replacement) * 7 + 12, 40)

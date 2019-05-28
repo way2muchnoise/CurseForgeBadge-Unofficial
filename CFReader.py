@@ -34,14 +34,18 @@ def get_versions(project):
     tree = html.fromstring(get_files(project))
     sel = CSSSelector('#filter-game-version option + option')
     results = [ele.text.replace('Minecraft ', '').replace('-Snapshot', '').lstrip() for ele in sel(tree) if 'Minecraft' in ele.text or 'Snapshot' in ele.text]
+    if not results:
+        for ele in sel(tree):
+            results.append(ele.text.lstrip())
     results = set(results)  # filter out duplicates
+    print results
     if len(results) > 0:
         return results
     else:
         return ['Error']
 
 
-def get_tile(project):
+def get_title(project):
     response = get_project(project)
     pattern = r'<h1 class="project-title.*?">\s+<a.*?>\s+<span class="overflow-tip">(.*?)\s*</span></a>\s+</h1>'
     m = re.search(pattern, response)
