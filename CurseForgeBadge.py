@@ -29,7 +29,8 @@ def title(project, suffix=None, prefix=None, l_colour='E04E14', r_colour='2D2D2D
     if suffix:
         replacement += ' ' + suffix
     replacement = replacement.strip()
-    width = max(len(replacement) * 7 + 12, 40)
+    width = len(replacement) * 7 + 12
+    replacement, width = apply_text_transforms(replacement, width, request.args)
     return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
                         offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
                         shadow_colour=shadow_colour, logo_colour=logo_colour), 200, {'Content-Type': 'image/svg+xml'}
@@ -64,6 +65,7 @@ def downloads(project, style='full', suffix=None, prefix=None, l_colour='E04E14'
         replacement += ' ' + suffix
     replacement = replacement.strip()
     width = max(len(replacement) * 7 + 12, 40)
+    replacement, width = apply_text_transforms(replacement, width, request.args)
     return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
                         offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
                         shadow_colour=shadow_colour, logo_colour=logo_colour), 200, {'Content-Type': 'image/svg+xml'}
@@ -82,7 +84,9 @@ def supported_versions(project, style='all', text='Available for', l_colour='2D2
     versions = CFReader.get_versions(project)
     versions_text = versions[0] if style == 'latest' else ' | '.join(str(version) for version in versions)
     version_width = max(len(versions_text) * 6, 40)
+    versions_text, version_width = apply_text_transforms(versions_text, version_width, request.args)
     text_width = len(text) * 7 + 4
+    text, text_width = apply_text_transforms(text, text_width, request.args)
     return create_badge(template, versions=versions_text, text=text, widthText=text_width, widthVersions=version_width,
                         totalWidth=(version_width + text_width), offsetText=(text_width / 2),
                         offsetVersions=(text_width + version_width / 2), l_colour=l_colour, r_colour=r_colour,
@@ -112,6 +116,7 @@ def packs(project, style='full', before='included in', after='packs', l_colour='
     if after:
         replacement += ' ' + after
     width = max(len(replacement) * 7 + 12, 40)
+    replacement, width = apply_text_transforms(replacement, width, request.args)
     return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
                         offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
                         shadow_colour=shadow_colour, logo_colour=logo_colour), 200, {'Content-Type': 'image/svg+xml'}
@@ -142,6 +147,7 @@ def mods(project, style='full', before='required for', after='mods', l_colour='E
             after = 'mod'
         replacement += ' ' + after
     width = max(len(replacement) * 7 + 12, 40)
+    replacement, width = apply_text_transforms(replacement, width, request.args)
     return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
                         offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
                         shadow_colour=shadow_colour, logo_colour=logo_colour), 200, {'Content-Type': 'image/svg+xml'}
@@ -174,6 +180,7 @@ def supported(project, style='full', before='supported by', after='mods', l_colo
             after = 'mod'
         replacement += ' ' + after
     width = max(len(replacement) * 7 + 12, 40)
+    replacement, width = apply_text_transforms(replacement, width, request.args)
     return create_badge(template, dls=replacement, width=width, totalWidth=(30 + width),
                         offset=(30.5 + width / 2), l_colour=l_colour, r_colour=r_colour, text_colour=text_colour,
                         shadow_colour=shadow_colour, logo_colour=logo_colour), 200, {'Content-Type': 'image/svg+xml'}
@@ -191,6 +198,13 @@ def open_template(template, args):
     if args.get('badge_style') == 'for_the_badge':
         uri += 'for_the_badge_'
     return app.open_resource(uri + template, 'r').read()
+
+
+def apply_text_transforms(text, width, args):
+    if args.get('badge_style') == 'for_the_badge':
+        text = text.upper()
+        width *= 1.2
+    return text, width
 
 
 if __name__ == '__main__':

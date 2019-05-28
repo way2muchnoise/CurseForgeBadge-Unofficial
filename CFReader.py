@@ -38,7 +38,6 @@ def get_versions(project):
         for ele in sel(tree):
             results.append(ele.text.lstrip())
     results = set(results)  # filter out duplicates
-    print results
     if len(results) > 0:
         return results
     else:
