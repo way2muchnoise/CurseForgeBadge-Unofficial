@@ -20,3 +20,5 @@ The base url is [https://cf.way2muchnoise.eu](https://cf.way2muchnoise.eu). Both
 * /versions/\<text>\_\<project>\_\<style>.svg: text is optional and replaces the default `Available for` text. The style can be either `all` or `latest`
     * [![](http://cf.way2muchnoise.eu/versions/jei_latest.svg)](https://minecraft.curseforge.com/projects/jei) -> `https://cf.way2muchnoise.eu/versions/jei_latest.svg`
     * [![](http://cf.way2muchnoise.eu/versions/For%20MC_240630_all.svg)](https://minecraft.curseforge.com/projects/just-enough-resources-jer) -> `https://cf.way2muchnoise.eu/versions/For%20MC_240630_all.svg`
+
+For many more patterns see [https://cf.way2muchnoise.eu](https://cf.way2muchnoise.eu)
