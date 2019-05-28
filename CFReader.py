@@ -39,7 +39,7 @@ def get_versions(project):
             results.append(ele.text.lstrip())
     results = set(results)  # filter out duplicates
     if len(results) > 0:
-        return results
+        return list(results)
     else:
         return ['Error']
 
