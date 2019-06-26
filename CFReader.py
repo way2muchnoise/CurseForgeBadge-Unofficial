@@ -7,7 +7,8 @@ from lxml.cssselect import CSSSelector
 def get_project(project):
     opener = urllib2.build_opener()
     opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
-    opened = opener.open("https://minecraft.curseforge.com/projects/" + project)
+    
+    opened = opener.open("https://www.curseforge.com/minecraft/mc-mods/" + project)
     if '?' in project:
         opened_url = opened.geturl()
         params = project.split('?')[-1]
