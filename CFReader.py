@@ -39,12 +39,9 @@ def get_downloads(project):
 
 def get_versions(project):
     tree = html.fromstring(get_files(project))
-    sel = CSSSelector('#filter-game-version option + option')
-    results = [ele.text.replace('Minecraft ', '').replace('-Snapshot', '').lstrip() for ele in sel(tree) if 'Minecraft' in ele.text or 'Snapshot' in ele.text]
-    if not results:
-        for ele in sel(tree):
-            results.append(ele.text.lstrip())
-    results = set(results)  # filter out duplicates
+    sel = CSSSelector('h4.e-sidebar-subheader.overflow-tip.mb-1 a')
+    results = [ele.text.replace('Minecraft ', '').replace('-Snapshot', '').strip() for ele in sel(tree) if 'Minecraft' in ele.text or 'Snapshot' in ele.text]
+    results = sorted(set(results), reverse=True)  # filter out duplicates
     if len(results) > 0:
         return list(results)
     else:
