@@ -1,13 +1,30 @@
+import json
 import re
 import urllib2
 from lxml import html
 from lxml.cssselect import CSSSelector
 
 
+def resolve_project_url(project):
+    project = project.split('?')[0].split('/')[0]
+    opener = urllib2.build_opener()
+    opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
+    if project.isdigit():
+        opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/' + project)
+        return json.loads(opened.read())['websiteUrl']
+    else:
+        opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&searchFilter=' + project)
+        results = json.loads(opened.read())
+        for result in results:
+            if result['slug'] == project:
+                return result['websiteUrl']
+        return results[0]['websiteUrl']
+
+
 def get_project(project, re_add_part=''):
     opener = urllib2.build_opener()
     opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
-    opened = opener.open("https://minecraft.curseforge.com/projects/" + project)
+    opened = opener.open(resolve_project_url(project))
     if '?' in project or re_add_part != "":
         opened_url = opened.geturl()
         if '?' in project:
