@@ -13,12 +13,16 @@ def resolve_project_url(project):
         opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/' + project)
         return json.loads(opened.read())['websiteUrl']
     else:
-        opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&searchFilter=' + project)
-        results = json.loads(opened.read())
-        for result in results:
-            if result['slug'] == project:
-                return result['websiteUrl']
-        return results[0]['websiteUrl']
+        search_string = project
+        while True:
+            opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&searchFilter=' + search_string)
+            results = json.loads(opened.read())
+            for result in results:
+                if result['slug'] == project:
+                    return result['websiteUrl']
+            search_string = search_string[:len(search_string) / 2]
+            if len(search_string) < 2:
+                return 'Error'
 
 
 def get_project(project, re_add_part=''):
