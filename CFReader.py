@@ -8,14 +8,22 @@ from lxml.cssselect import CSSSelector
 def resolve_project_url(project):
     project = project.split('?')[0].split('/')[0]
     opener = urllib2.build_opener()
-    opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
+    # Minic Twitch client
+    opener.addheaders = [
+        ('user-agent', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                       'twitch-desktop-electron-platform/1.0.0 Chrome/66.0.3359.181 Twitch/3.0.16 Safari/537.36 '
+                       'desklight/8.42.2'),
+        ('authority', 'addons-ecs.forgesvc.net'),
+        ('origin', 'https://www.twitch.tv')
+    ]
     if project.isdigit():
         opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/' + project)
         return json.loads(opened.read())['websiteUrl']
     else:
         search_string = project
         while True:
-            opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&searchFilter=' + search_string)
+            opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&pagesize=100'
+                                 '&searchFilter=' + search_string)
             results = json.loads(opened.read())
             for result in results:
                 if result['slug'] == project:
@@ -27,6 +35,7 @@ def resolve_project_url(project):
 
 def get_project(project, re_add_part=''):
     opener = urllib2.build_opener()
+    # Mimic browser
     opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
     opened = opener.open(resolve_project_url(project))
     if '?' in project or re_add_part != "":
