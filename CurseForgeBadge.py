@@ -83,7 +83,6 @@ def supported_versions(project, style='all', text='Available for', l_colour='2D2
     template = open_template('shield.svg', request.args)
     versions = CFReader.get_versions(project)
     versions_text = versions[0] if style == 'latest' else ' | '.join(str(version) for version in versions)
-    # versions_text = CFReader.get_version(project)
     version_width = max(len(versions_text) * 6, 40)
     versions_text, version_width = apply_text_transforms(versions_text, version_width, request.args)
     text_width = len(text) * 7 + 4
