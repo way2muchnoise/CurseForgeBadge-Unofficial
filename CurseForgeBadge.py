@@ -188,8 +188,10 @@ def supported(project, style='full', before='supported by', after='mods', l_colo
 
 @app.after_request
 def add_header(response):
-    # Image may be cached up to 3 hour
+    # Image may be cached up to 3 hours
     response.cache_control.max_age = 60 * 60 * 3
+    # Add ETag
+    response.add_etag()
     return response
 
 
