@@ -19,14 +19,15 @@ def get_project(project):
         return json.loads(opened.read())
     else:
         search_string = project
+        search_slug = project.lower()
         while True:
             opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&pagesize=100'
                                  '&searchFilter=' + search_string)
             results = json.loads(opened.read())
             for result in results:
-                if result['slug'] == project:
+                if result['slug'] == search_slug:
                     return result
-            search_string = search_string[:len(search_string) / 2]
+            search_string = search_string[:int(len(search_string) / 2)]
             if len(search_string) < 2:
                 return None
 
