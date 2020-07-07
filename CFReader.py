@@ -43,7 +43,7 @@ def get_versions(project):
             re.sub(r'(\d+)\.(\d+)(\.\d+)?', r'\1.\2', gameVersionLatestFile['gameVersion'])
             for gameVersionLatestFile in response['gameVersionLatestFiles']
         ]
-        return list(sorted(set(results), reverse=True, key=lambda s: map(int, s.split('.'))))
+        return list(sorted(set(results), reverse=True, key=lambda s: list(map(int, s.split('.')))))
     else:
         return ['Error']
 
