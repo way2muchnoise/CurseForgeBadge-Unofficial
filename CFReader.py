@@ -1,11 +1,11 @@
 import json
 import re
-import urllib2
+import urllib.request
 
 
 def get_project(project):
     project = project.split('?')[0].split('/')[0]
-    opener = urllib2.build_opener()
+    opener = urllib.request.build_opener()
     # Minic Twitch client
     opener.addheaders = [
         ('user-agent', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '

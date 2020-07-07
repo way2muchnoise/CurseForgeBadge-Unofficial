@@ -3,19 +3,19 @@ import gzip
 import os
 import re
 from HTMLParser import HTMLParser
-from urllib2 import HTTPError
+from urllib.error import HTTPError
 
 import CFReader
 
-directory = raw_input('dir to read: ')
-output = open(raw_input('output file: '), 'w')
+directory = input('dir to read: ')
+output = open(input('output file: '), 'w')
 if not directory.endswith('/'):
     directory += '/'
 pattern = re.compile(r'GET /(.*?\.svg) ')
 calls = []
 for filename in os.listdir(directory):
     if fnmatch.fnmatch(filename, 'access.log-*.gz'):
-        print 'Analysing ' + filename
+        print('Analysing ' + filename)
         with gzip.open(directory + filename, 'rb') as f:
             for line in f.read().split('\n'):
                 match = pattern.search(line)
@@ -31,7 +31,7 @@ for project in set(resolve):
     try:
         projects.append(h.unescape(CFReader.get_title(project)).strip())
     except HTTPError:
-        print 'Errored on ' + project
+        print('Errored on ' + project)
 for project in set(projects):
     output.write(project + '\n')
 output.close()
