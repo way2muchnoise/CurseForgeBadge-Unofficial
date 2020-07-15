@@ -199,6 +199,8 @@ def open_template(template, args):
     uri = 'templates/'
     if args.get('badge_style') == 'for_the_badge':
         uri += 'for_the_badge_'
+    elif args.get('badge_style') == 'flat':
+        uri += 'flat_'
     return app.open_resource(uri + template, 'r').read()
 
 
