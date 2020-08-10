@@ -15,11 +15,14 @@ def landing():
 
 @app.route('/author/<name>.svg')
 @app.route('/author/<name>(<l_colour>).svg')
-@app.route('/author/<name>_<prefix>_<suffix>.svg')
-@app.route('/author/<name>(<l_colour>).svg')
-@app.route('/author/<name>_<prefix>_<suffix>(<l_colour>).svg')
-@app.route('/author/<name>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
-@app.route('/author/<name>_<prefix>_<suffix>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+@app.route('/<style>_<name>.svg')
+@app.route('/<style>_<name>(<l_colour>).svg')
+@app.route('/<style>_<name>_<suffix>.svg')
+@app.route('/<style>_<name>_<suffix>(<l_colour>).svg')
+@app.route('/<style>_<name>_<prefix>_<suffix>.svg')
+@app.route('/<style>_<name>_<prefix>_<suffix>(<l_colour>).svg')
+@app.route('/<style>_<name>_<suffix>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
+@app.route('/<style>_<name>_<prefix>_<suffix>(<l_colour>-<r_colour>-<text_colour>-<shadow_colour>-<logo_colour>).svg')
 def author(name, style='full', suffix=None, prefix=None, l_colour='E04E14', r_colour='2D2D2D', text_colour='fff',
               shadow_colour='010101', logo_colour='1C1C1C'):
     template = open_template('curseShield.svg', request.args)
