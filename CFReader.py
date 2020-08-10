@@ -32,6 +32,28 @@ def get_project(project):
                 return None
 
 
+def get_downloads_author(author):
+    opener = urllib.request.build_opener()
+    # Minic Twitch client
+    opener.addheaders = [
+        ('user-agent', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                       'twitch-desktop-electron-platform/1.0.0 Chrome/66.0.3359.181 Twitch/3.0.16 Safari/537.36 '
+                       'desklight/8.42.2'),
+        ('authority', 'addons-ecs.forgesvc.net'),
+        ('origin', 'https://www.twitch.tv')
+    ]
+    search_string = author.lower()
+    opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&pagesize=100'
+                         '&searchFilter=' + search_string)
+    results = json.loads(opened.read())
+    author_download_count = 0
+    for result in results:
+        authors = map(lambda result_authors: result_authors['name'], result['authors'])
+        if author in authors:
+            author_download_count += result['downloadCount']
+    return '{:,}'.format(int(author_download_count))
+
+
 def get_downloads(project):
     response = get_project(project)
     return '{:,}'.format(int(response['downloadCount'])) if response else 'Error'
