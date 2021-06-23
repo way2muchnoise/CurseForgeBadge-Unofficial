@@ -3,7 +3,7 @@ name: Bug report
 about: Found a bug or have an issue? Let us know!
 title: 'Issue - '
 labels: bug
-assignees: ''
+assignees: 'way2muchnoise'
 
 ---
 
