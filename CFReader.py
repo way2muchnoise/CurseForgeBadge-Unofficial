@@ -21,7 +21,7 @@ def get_project(project):
         search_string = project
         search_slug = project.lower()
         while True:
-            opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&pagesize=100'
+            opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&pagesize=50'
                                  '&searchFilter=' + search_string)
             results = json.loads(opened.read())
             for result in results:
@@ -43,7 +43,7 @@ def get_downloads_author(author):
         ('origin', 'https://www.twitch.tv')
     ]
     search_string = author.lower()
-    opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&pagesize=100'
+    opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&pagesize=50'
                          '&searchFilter=' + search_string)
     results = json.loads(opened.read())
     author_download_count = 0
