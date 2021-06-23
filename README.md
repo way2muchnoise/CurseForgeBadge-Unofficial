@@ -4,7 +4,7 @@ A little badge/shield for minecraft mods/packs/... on CurseForge
 ## Usage
 The base url is [https://cf.way2muchnoise.eu](https://cf.way2muchnoise.eu). Both http and https are available. 
 
-**I advice using http when using it on GitHub since it doesn't seem to like my https that much.**
+**I advise using http when using it on GitHub since it doesn't seem to like my https that much.**
 
 ### Possible patterns
 
