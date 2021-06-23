@@ -22,3 +22,5 @@ The base url is [https://cf.way2muchnoise.eu](https://cf.way2muchnoise.eu). Both
     * [![](http://cf.way2muchnoise.eu/versions/For%20MC_240630_all.svg)](https://minecraft.curseforge.com/projects/just-enough-resources-jer) -> `https://cf.way2muchnoise.eu/versions/For%20MC_240630_all.svg`
 
 For many more patterns see [https://cf.way2muchnoise.eu](https://cf.way2muchnoise.eu)
+
+Documenation: https://github.com/way2muchnoise/CurseForgeBadge/wiki
