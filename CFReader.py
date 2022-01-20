@@ -1,29 +1,35 @@
 import json
 import re
 import urllib.request
+from os import getenv
+
+API_KEY = getenv('API_KEY')
+API_URL = 'https://api.curseforge.com'
+MINECRAFT_GAME_ID = '432'
+
+
+def new_api_call():
+    opener = urllib.request.build_opener()
+    opener.addheaders = [
+        ('user-agent', 'CFBadge'),
+        ('x-api-key', API_KEY),
+        ('Accept', 'application/json')
+    ]
+    return opener
 
 
 def get_project(project):
     project = project.split('?')[0].split('/')[0]
-    opener = urllib.request.build_opener()
-    # Minic Twitch client
-    opener.addheaders = [
-        ('user-agent', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                       'twitch-desktop-electron-platform/1.0.0 Chrome/66.0.3359.181 Twitch/3.0.16 Safari/537.36 '
-                       'desklight/8.42.2'),
-        ('authority', 'addons-ecs.forgesvc.net'),
-        ('origin', 'https://www.twitch.tv')
-    ]
+    api_call = new_api_call()
     if project.isdigit():
-        opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/' + project)
-        return json.loads(opened.read())
+        api_response = api_call.open(API_URL + '/v1/mods/' + project)
+        return json.loads(api_response.read())['data']
     else:
         search_string = project
         search_slug = project.lower()
         while True:
-            opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&pagesize=50'
-                                 '&searchFilter=' + search_string)
-            results = json.loads(opened.read())
+            api_response = api_call.open(API_URL + '/v1/mods/search?gameId=432&pagesize=50&searchFilter=' + search_string)
+            results = json.loads(api_response.read())['data']
             for result in results:
                 if result['slug'] == search_slug:
                     return result
@@ -33,19 +39,10 @@ def get_project(project):
 
 
 def get_downloads_author(author):
-    opener = urllib.request.build_opener()
-    # Minic Twitch client
-    opener.addheaders = [
-        ('user-agent', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                       'twitch-desktop-electron-platform/1.0.0 Chrome/66.0.3359.181 Twitch/3.0.16 Safari/537.36 '
-                       'desklight/8.42.2'),
-        ('authority', 'addons-ecs.forgesvc.net'),
-        ('origin', 'https://www.twitch.tv')
-    ]
+    api_call = new_api_call()
     search_string = author.lower()
-    opened = opener.open('https://addons-ecs.forgesvc.net/api/v2/addon/search?gameId=432&pagesize=50'
-                         '&searchFilter=' + search_string)
-    results = json.loads(opened.read())
+    api_response = api_call.open(API_URL + '/v1/mods/search?gameId=432&pagesize=50&searchFilter=' + search_string)
+    results = json.loads(api_response.read())['data']
     author_download_count = 0
     for result in results:
         authors = map(lambda result_authors: result_authors['name'], result['authors'])
@@ -55,16 +52,16 @@ def get_downloads_author(author):
 
 
 def get_downloads(project):
-    response = get_project(project)
-    return '{:,}'.format(int(response['downloadCount'])) if response else 'Error'
+    api_response = get_project(project)
+    return '{:,}'.format(int(api_response['downloadCount'])) if api_response else 'Error'
 
 
 def get_versions(project):
-    response = get_project(project)
-    if response:
-        results = [ # Only take major versions
+    api_response = get_project(project)
+    if api_response:
+        results = [  # Only take major versions
             re.sub(r'(\d+)\.(\d+)(\.\d+)?', r'\1.\2', gameVersionLatestFile['gameVersion'])
-            for gameVersionLatestFile in response['gameVersionLatestFiles']
+            for gameVersionLatestFile in api_response['gameVersionLatestFiles']
         ]
         return list(sorted(set(results), reverse=True, key=lambda s: list(map(int, s.split('.')))))
     else:
@@ -84,10 +81,6 @@ dependents_dict = {
     'incompatible': '5',
     'included': '6'
 }
-
-
-def get_dependents_old(project, type):
-    return 'Error'
 
 
 def get_dependents_old(project, type):
