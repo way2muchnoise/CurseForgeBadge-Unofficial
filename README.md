@@ -1,5 +1,5 @@
-# CurseForgeBadge
-A little badge/shield for minecraft mods/packs/... on CurseForge
+# CurseForgeBadge (Unofficial)
+A little badge/shield for minecraft mods/packs/... on CurseForge. This service is not affliated with CurseForge.  
 
 ## Usage
 The base url is [https://cf.way2muchnoise.eu](https://cf.way2muchnoise.eu). Both http and https are available. 
