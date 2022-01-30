@@ -11,7 +11,7 @@ MINECRAFT_GAME_ID = '432'
 def new_api_call():
     opener = urllib.request.build_opener()
     opener.addheaders = [
-        ('user-agent', 'CFBadge'),
+        ('user-agent', 'way2muchnoise'),
         ('x-api-key', API_KEY),
         ('Accept', 'application/json')
     ]
