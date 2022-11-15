@@ -28,7 +28,7 @@ def get_project(project):
         search_string = project
         search_slug = project.lower()
         while True:
-            api_response = api_call.open(API_URL + '/v1/mods/search?gameId=432&pagesize=50&searchFilter=' + search_string)
+            api_response = api_call.open(API_URL + '/v1/mods/search?gameId=432&pagesize=50&slug=' + search_string)
             results = json.loads(api_response.read())['data']
             for result in results:
                 if result['slug'] == search_slug:
