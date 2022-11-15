@@ -41,7 +41,7 @@ def get_project(project):
 def get_downloads_author(author):
     api_call = new_api_call()
     search_string = author.lower()
-    api_response = api_call.open(API_URL + '/v1/mods/search?gameId=432&pagesize=50&searchFilter=' + search_string)
+    api_response = api_call.open(API_URL + '/v1/mods/search?gameId=432&pagesize=50&slug=' + search_string)
     results = json.loads(api_response.read())['data']
     author_download_count = 0
     for result in results:
