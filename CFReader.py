@@ -6,6 +6,22 @@ from os import getenv
 API_KEY = getenv('API_KEY')
 API_URL = 'https://api.curseforge.com'
 MINECRAFT_GAME_ID = '432'
+PAGE_SIZE = 50
+
+MOD_SEARCH_SORT = {
+    'Featured': '1',
+    'Popularity': '2',
+    'LastUpdated': '3',
+    'Name': '4',
+    'Author': '5',
+    'TotalDownloads': '6',
+    'Category': '7',
+    'GameVersion': '8',
+    'EarlyAccess': '9',
+    'FeaturedReleased': '10',
+    'ReleasedDate': '11',
+    'Rating': '12',
+}
 
 
 def new_api_call():
@@ -22,13 +38,13 @@ def get_project(project):
     project = project.split('?')[0].split('/')[0]
     api_call = new_api_call()
     if project.isdigit():
-        api_response = api_call.open(API_URL + '/v1/mods/' + project)
+        api_response = api_call.open(f'{API_URL}/v1/mods/{project}')
         return json.loads(api_response.read())['data']
     else:
         search_string = project
         search_slug = project.lower()
         while True:
-            api_response = api_call.open(API_URL + '/v1/mods/search?gameId=432&pagesize=50&searchFilter=' + search_string)
+            api_response = api_call.open(f'{API_URL}/v1/mods/search?gameId={MINECRAFT_GAME_ID}&pagesize={PAGE_SIZE}&searchFilter={search_string}&sortField={MOD_SEARCH_SORT["TotalDownloads"]}&sortOrder=desc')
             results = json.loads(api_response.read())['data']
             for result in results:
                 if result['slug'] == search_slug:
@@ -41,7 +57,7 @@ def get_project(project):
 def get_downloads_author(author):
     api_call = new_api_call()
     search_string = author.lower()
-    api_response = api_call.open(API_URL + '/v1/mods/search?gameId=432&pagesize=50&searchFilter=' + search_string)
+    api_response = api_call.open(f'{API_URL}/v1/mods/search?gameId={MINECRAFT_GAME_ID}&pagesize={PAGE_SIZE}&searchFilter={search_string}&sortField={MOD_SEARCH_SORT["TotalDownloads"]}&sortOrder=desc')
     results = json.loads(api_response.read())['data']
     author_download_count = 0
     for result in results:
